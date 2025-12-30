@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X Akademi Başvuru Formu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="screen active">
+        <div class="welcome-content">
+            <h1 class="welcome-title">X Akademi Başvuru Formu (~10 dak)</h1>
+            <div class="welcome-text">
+                X Akademi bir YKS markasıdır. <br>
+                <br>
+                2026 sezonu için geliştirilecek sistem odaklı ürünlerimiz için güçlü bir çekirdek ekip kurmak istiyoruz. <br>
+                <br>
+                Bu başvuru sürecinde: <br>
+                <ul class="welcome-list">
+                    <li>Nasıl çalıştığımızı</li>
+                    <li>Ne beklediğimizi</li>
+                    <li>Ne yaptığımızı</li>
+                </ul>
+                açıkça göreceksin.
+            </div>
+            <button id="start-btn" class="cta-button">Devam Et</button>
+        </div>
+    </div>
+
+    <!-- Form Screen -->
+    <div id="form-screen" class="screen">
+        <div class="form-container">
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+                <span id="progress-text" class="progress-text">0 / 0</span>
+            </div>
+
+            <!-- Back Button -->
+            <button id="back-btn" class="back-button">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Geri
+            </button>
+
+            <!-- Form Content -->
+            <div id="form-content" class="form-content">
+                <!-- Form steps will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

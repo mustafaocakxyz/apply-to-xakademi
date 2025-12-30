@@ -1,0 +1,508 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #000000;
+    color: #FFD700;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.screen {
+    display: none;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.screen.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Welcome Screen Styles */
+#welcome-screen {
+    padding: 2rem;
+}
+
+.welcome-content {
+    text-align: left;
+    max-width: 800px;
+    padding: 2rem;
+}
+
+.welcome-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #FFD700;
+    margin-bottom: 2rem;
+    line-height: 1.2;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.welcome-title.animate {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.welcome-text {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: #FFFFFF;
+    line-height: 1.6;
+    margin-bottom: 3rem;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.welcome-text.animate {
+    animation: fadeInUp 0.8s ease-out forwards;
+    opacity: 0.9;
+}
+
+.welcome-text br,
+.form-text br {
+    display: block;
+    margin-bottom: 1.5rem;
+    line-height: 1.5rem;
+}
+
+.welcome-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 1rem 0;
+}
+
+.welcome-list li {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    opacity: 0;
+    transform: translateX(-20px);
+}
+
+.welcome-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #FFD700;
+    font-size: 1.5rem;
+    line-height: 1.2;
+}
+
+.welcome-list li {
+    opacity: 0;
+    transform: translateX(-20px);
+    animation: fadeInLeft 0.6s ease-out forwards;
+}
+
+.welcome-list li.animate {
+    animation: fadeInLeft 0.6s ease-out forwards;
+}
+
+.welcome-list li.animate:nth-of-type(1) {
+    animation-delay: 0s;
+}
+
+.welcome-list li.animate:nth-of-type(2) {
+    animation-delay: 0.2s;
+}
+
+.welcome-list li.animate:nth-of-type(3) {
+    animation-delay: 0.4s;
+}
+
+/* Welcome Page Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.cta-button {
+    background-color: #FFD700;
+    color: #000000;
+    border: none;
+    padding: 1rem 3rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.cta-button.animate {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.cta-button:hover {
+    background-color: #FFED4E;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+}
+
+.cta-button:active {
+    transform: translateY(0);
+}
+
+/* Form Screen Styles */
+#form-screen {
+    padding: 2rem;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 4rem;
+}
+
+.form-container {
+    max-width: 700px;
+    width: 100%;
+}
+
+/* Progress Bar */
+.progress-container {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 6px;
+    background-color: rgba(255, 215, 0, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #FFD700;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+    width: 0%;
+}
+
+.progress-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #FFD700;
+    min-width: 60px;
+    text-align: right;
+}
+
+/* Back Button */
+.back-button {
+    background: transparent;
+    border: 2px solid #FFD700;
+    color: #FFD700;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 3rem;
+}
+
+.back-button:hover {
+    background-color: rgba(255, 215, 0, 0.1);
+    border-color: #FFED4E;
+}
+
+.back-button:active {
+    transform: scale(0.98);
+}
+
+.back-button.hidden {
+    display: none;
+}
+
+/* Form Content */
+.form-content {
+    min-height: 400px;
+}
+
+.form-step {
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+.form-step.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-question {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #FFD700;
+    margin-bottom: 2.5rem;
+    line-height: 1.3;
+}
+
+.form-text {
+    font-size: 1.125rem;
+    font-weight: 400;
+    color: #FFFFFF;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.form-text ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 1rem 0;
+}
+
+.form-text ul li {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.form-text ul li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #FFD700;
+    font-size: 1.5rem;
+    line-height: 1.2;
+}
+
+.form-info-button {
+    background-color: #FFD700;
+    color: #000000;
+    border: none;
+    padding: 1rem 2.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-info-button:hover {
+    background-color: #FFED4E;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+}
+
+.form-info-button:active {
+    transform: translateY(0);
+}
+
+.form-field-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-field-label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #FFFFFF;
+    margin-bottom: 0.75rem;
+    opacity: 0.9;
+}
+
+/* Example Images */
+.example-images {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.example-image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    object-fit: contain;
+    background-color: rgba(255, 215, 0, 0.05);
+}
+
+@media (max-width: 768px) {
+    .example-images {
+        gap: 1rem;
+        margin: 1.5rem 0;
+    }
+}
+
+/* Form Input Styles */
+.form-answers {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Radio/Checkbox Options */
+.option {
+    display: flex;
+    align-items: center;
+    padding: 1.25rem;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: transparent;
+}
+
+.option:hover {
+    border-color: #FFD700;
+    background-color: rgba(255, 215, 0, 0.05);
+}
+
+.option input[type="radio"],
+.option input[type="checkbox"] {
+    margin-right: 1rem;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #FFD700;
+}
+
+.option label {
+    flex: 1;
+    cursor: pointer;
+    font-size: 1.125rem;
+    font-weight: 400;
+    color: #FFD700;
+}
+
+/* Text Input */
+.text-input,
+.textarea-input {
+    width: 100%;
+    padding: 1.25rem;
+    background-color: transparent;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 8px;
+    color: #FFD700;
+    font-size: 1.125rem;
+    font-family: 'Montserrat', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.text-input:focus,
+.textarea-input:focus {
+    outline: none;
+    border-color: #FFD700;
+    background-color: rgba(255, 215, 0, 0.05);
+}
+
+.textarea-input {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.textarea-input.long {
+    min-height: 200px;
+}
+
+.text-input::placeholder,
+.textarea-input::placeholder {
+    color: rgba(255, 215, 0, 0.5);
+}
+
+/* Next Button */
+.next-button {
+    background-color: #FFD700;
+    color: #000000;
+    border: none;
+    padding: 1rem 2.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.next-button:hover {
+    background-color: #FFED4E;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+}
+
+.next-button:active {
+    transform: translateY(0);
+}
+
+.next-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .welcome-title {
+        font-size: 2rem;
+    }
+
+    .welcome-text {
+        font-size: 1.125rem;
+    }
+
+    .form-question {
+        font-size: 1.5rem;
+    }
+
+    #form-screen {
+        padding: 1.5rem;
+        padding-top: 2rem;
+    }
+
+    .form-container {
+        max-width: 100%;
+    }
+}
+
