@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X Akademi - Başvuru Formu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .bp-form-container {
+            max-width: 700px;
+            width: 100%;
+            padding: 2rem;
+            margin: 0 auto;
+        }
+
+        .bp-form-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #FFD700;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .bp-form {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .bp-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .bp-form-label {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: #FFD700;
+            opacity: 0.9;
+        }
+
+        .bp-form-input {
+            width: 100%;
+            padding: 1.25rem;
+            background-color: transparent;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            color: #FFD700;
+            font-size: 1.125rem;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .bp-form-input:focus {
+            outline: none;
+            border-color: #FFD700;
+            background-color: rgba(255, 215, 0, 0.05);
+        }
+
+        .bp-form-input::placeholder {
+            color: rgba(255, 215, 0, 0.5);
+        }
+
+        .bp-submit-button {
+            background-color: #FFD700;
+            color: #000000;
+            border: none;
+            padding: 1rem 3rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 1rem;
+            align-self: center;
+        }
+
+        .bp-submit-button:hover {
+            background-color: #FFED4E;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .bp-submit-button:active {
+            transform: translateY(0);
+        }
+
+        .bp-success-message {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .bp-success-message.active {
+            display: block;
+        }
+
+        .bp-success-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #FFD700;
+            margin-bottom: 1.5rem;
+        }
+
+        .bp-success-text {
+            font-size: 1.125rem;
+            font-weight: 400;
+            color: #FFFFFF;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .bp-form-container {
+                padding: 1.5rem;
+            }
+
+            .bp-form-title {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bp-form-container">
+        <h1 class="bp-form-title">Başvuru Formu</h1>
+        
+        <form id="bp-form" class="bp-form">
+            <div class="bp-form-group">
+                <label class="bp-form-label" for="question1">1 - Kaçıncı sınıfsın? (Mezunsan mezun yazabilirsin.)</label>
+                <input type="text" class="bp-form-input" id="question1" name="question1" placeholder="Örn: 12. Sınıf veya Mezun" required>
+            </div>
+
+            <div class="bp-form-group">
+                <label class="bp-form-label" for="question2">2 - Okula / Dershaneye gidiyor musun? Hangi günler ve saatler olduğunu yazabilir misin?</label>
+                <input type="text" class="bp-form-input" id="question2" name="question2" placeholder="Örn: Evet, Pazartesi-Çarşamba 14:00-18:00" required>
+            </div>
+
+            <div class="bp-form-group">
+                <label class="bp-form-label" for="question3">3 - Hangi alandan hazırlanıyorsun?</label>
+                <input type="text" class="bp-form-input" id="question3" name="question3" placeholder="Örn: Sayısal, Eşit Ağırlık, Sözel" required>
+            </div>
+
+            <div class="bp-form-group">
+                <label class="bp-form-label" for="question4">4 - Hedef sıralaman nedir?</label>
+                <input type="text" class="bp-form-input" id="question4" name="question4" placeholder="Örn: İlk 1000" required>
+            </div>
+
+            <div class="bp-form-group">
+                <label class="bp-form-label" for="question5">5 - Günde ortalama kaç saat çalışabilirsin? (Okul, dershane vb. hariç)</label>
+                <input type="text" class="bp-form-input" id="question5" name="question5" placeholder="Örn: 4-5 saat" required>
+            </div>
+
+            <div class="bp-form-group">
+                <label class="bp-form-label" for="question6">6 - Ortalama TYT Türkçe netin nedir?</label>
+                <input type="text" class="bp-form-input" id="question6" name="question6" placeholder="Örn: 35 net" required>
+            </div>
+
+            <div class="bp-form-group">
+                <label class="bp-form-label" for="question7">7 - Ortalama TYT Matematik netin nedir?</label>
+                <input type="text" class="bp-form-input" id="question7" name="question7" placeholder="Örn: 30 net" required>
+            </div>
+
+            <div class="bp-form-group">
+                <label class="bp-form-label" for="question8">8 - Ortalama AYT Matematik netin nedir? Eğer henüz AYT çözmediysen hangi konuları bitirdiğini de yazabilirsin.</label>
+                <input type="text" class="bp-form-input" id="question8" name="question8" placeholder="Örn: 25 net veya Limit, Türev konularını bitirdim" required>
+            </div>
+
+            <button type="submit" class="bp-submit-button">Gönder</button>
+        </form>
+
+        <div id="bp-success-message" class="bp-success-message">
+            <h2 class="bp-success-title">Başvurun Alındı</h2>
+            <div class="bp-success-text">
+                İlgilendiğin için teşekkürler. <br><br>
+                Başvurularımız aktif olarak inceleniyor ve 24 saat içerisinde dönüş yapıyoruz.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('bp-form');
+        const successMessage = document.getElementById('bp-success-message');
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Collect form data
+            const formData = {
+                timestamp: new Date().toISOString(),
+                question1: document.getElementById('question1').value,
+                question2: document.getElementById('question2').value,
+                question3: document.getElementById('question3').value,
+                question4: document.getElementById('question4').value,
+                question5: document.getElementById('question5').value,
+                question6: document.getElementById('question6').value,
+                question7: document.getElementById('question7').value,
+                question8: document.getElementById('question8').value
+            };
+
+            // Submit to Google Sheets
+            // ⚠️ REPLACE THIS WITH YOUR BP FORM GOOGLE APPS SCRIPT WEB APP URL
+            const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyGtCeJ3pVfTyaYBz1HbKn3IioZBt-xYbqAC-LdXkA_feWCMdrI_VrM2SPhALg5c77Z/exec';
+            
+            try {
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        formType: 'bp',
+                        ...formData
+                    })
+                });
+
+                // Hide form and show success message
+                form.style.display = 'none';
+                successMessage.classList.add('active');
+                
+                console.log('BP Form submitted successfully');
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('Form gönderilirken bir hata oluştu. Lütfen tekrar deneyin.');
+            }
+        });
+    </script>
+</body>
+</html>
