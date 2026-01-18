@@ -26,6 +26,7 @@ function doPost(e) {
     if (sheet.getLastRow() === 0) {
       const headers = [
         'Timestamp',
+        'Ad Soyad',
         'Sınıf',
         'Okul / Dershane',
         'Alan',
@@ -48,6 +49,7 @@ function doPost(e) {
     const data = JSON.parse(e.postData.contents);
     
     // Extract form data
+    const name = data.name || ''; // Ad Soyad
     const question1 = data.question1 || ''; // Sınıf
     const question2 = data.question2 || ''; // Okul / Dershane
     const question3 = data.question3 || ''; // Alan
@@ -60,6 +62,7 @@ function doPost(e) {
     // Create row data
     const row = [
       new Date(), // Timestamp
+      name,
       question1,
       question2,
       question3,
@@ -102,6 +105,7 @@ function doPost(e) {
  */
 function testBPFunction() {
   const testData = {
+    name: 'Test Kullanıcı',
     question1: '12. Sınıf',
     question2: 'Evet, Pazartesi-Çarşamba 14:00-18:00',
     question3: 'Sayısal',

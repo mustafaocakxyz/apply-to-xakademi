@@ -134,6 +134,11 @@
         
         <form id="bp-form" class="bp-form">
             <div class="bp-form-group">
+                <label class="bp-form-label" for="name">Adınız</label>
+                <input type="text" class="bp-form-input" id="name" name="name" placeholder="Adınız ve soyadınız" required>
+            </div>
+
+            <div class="bp-form-group">
                 <label class="bp-form-label" for="question1">1 - Kaçıncı sınıfsın? (Mezunsan mezun yazabilirsin.)</label>
                 <input type="text" class="bp-form-input" id="question1" name="question1" placeholder="Örn: 12. Sınıf veya Mezun" required>
             </div>
@@ -195,6 +200,7 @@
             // Collect form data
             const formData = {
                 timestamp: new Date().toISOString(),
+                name: document.getElementById('name').value,
                 question1: document.getElementById('question1').value,
                 question2: document.getElementById('question2').value,
                 question3: document.getElementById('question3').value,
