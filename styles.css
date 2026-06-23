@@ -71,51 +71,6 @@ body {
     line-height: 1.5rem;
 }
 
-.welcome-list {
-    list-style: none;
-    padding-left: 0;
-    margin: 1rem 0;
-}
-
-.welcome-list li {
-    margin: 0.5rem 0;
-    padding-left: 1.5rem;
-    position: relative;
-    opacity: 0;
-    transform: translateX(-20px);
-}
-
-.welcome-list li::before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    color: #FFD700;
-    font-size: 1.5rem;
-    line-height: 1.2;
-}
-
-.welcome-list li {
-    opacity: 0;
-    transform: translateX(-20px);
-    animation: fadeInLeft 0.6s ease-out forwards;
-}
-
-.welcome-list li.animate {
-    animation: fadeInLeft 0.6s ease-out forwards;
-}
-
-.welcome-list li.animate:nth-of-type(1) {
-    animation-delay: 0s;
-}
-
-.welcome-list li.animate:nth-of-type(2) {
-    animation-delay: 0.2s;
-}
-
-.welcome-list li.animate:nth-of-type(3) {
-    animation-delay: 0.4s;
-}
-
 /* Welcome Page Animations */
 @keyframes fadeInUp {
     from {
@@ -125,17 +80,6 @@ body {
     to {
         opacity: 1;
         transform: translateY(0);
-    }
-}
-
-@keyframes fadeInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
     }
 }
 
@@ -346,31 +290,6 @@ body {
     color: #FFFFFF;
     margin-bottom: 0.75rem;
     opacity: 0.9;
-}
-
-/* Example Images */
-.example-images {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    margin: 2rem 0;
-}
-
-.example-image {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    border: 2px solid rgba(255, 215, 0, 0.3);
-    object-fit: contain;
-    background-color: rgba(255, 215, 0, 0.05);
-}
-
-@media (max-width: 768px) {
-    .example-images {
-        gap: 1rem;
-        margin: 1.5rem 0;
-    }
 }
 
 /* Form Input Styles */

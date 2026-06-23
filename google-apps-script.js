@@ -25,15 +25,20 @@ function doPost(e) {
     if (sheet.getLastRow() === 0) {
       const headers = [
         'Timestamp',
+        'Görevleri Yerine Getirebilir mi?',
+        'Toplantılara Katılabilir mi?',
         'Ad Soyad',
-        'Telefon Numarası',
         'Sınıf',
-        'Haftalık Çalışma Saati',
-        'Kabiliyetler',
-        'Önceki İş',
-        'Düşünceler',
-        'Örnek Sayfa Cevapları',
-        'Test Onayı'
+        'Telefon',
+        'Hedef',
+        'Ortalama TYT Net',
+        'Ortalama AYT Net',
+        'Günlük Çalışma Saati',
+        'Mevcut Seviye',
+        'Katılma Sebepleri',
+        'Beklentiler',
+        'Heyecanlandıran Seçenekler',
+        'İzinler'
       ];
       sheet.appendRow(headers);
       
@@ -47,56 +52,37 @@ function doPost(e) {
     // Parse incoming data
     const data = JSON.parse(e.postData.contents);
     
-    // Extract personal info
+    const expectations = data.expectations || {};
     const personalInfo = data.personalInfo || {};
-    const fullname = personalInfo.fullname || '';
-    const phone = personalInfo.phone || '';
-    const className = personalInfo.class || '';
-    const hours = personalInfo.hours || '';
-    
-    // Extract capabilities
-    const capabilities = Array.isArray(data.capabilities) 
-      ? data.capabilities.join(', ') 
+    const yksInfo = data.yksInfo || {};
+    const motivation = data.motivation || {};
+    const permissions = Array.isArray(data.permissions)
+      ? data.permissions.join(' | ')
+      : '';
+    const excitement = Array.isArray(motivation.excitement)
+      ? motivation.excitement.join(', ')
       : '';
     
-    // Extract other fields
-    const previousWork = data.previousWork || '';
-    const thoughts = data.thoughts || '';
-    const testConfirmation = data.testConfirmation || '';
-    
-    // Format example pages data
-    let examplePagesText = '';
-    if (data.examplePages && Object.keys(data.examplePages).length > 0) {
-      const examplePagesArray = [];
-      Object.keys(data.examplePages).forEach(question => {
-        const answer = data.examplePages[question];
-        if (typeof answer === 'object') {
-          examplePagesArray.push(`${question}: ${JSON.stringify(answer)}`);
-        } else {
-          examplePagesArray.push(`${question}: ${answer}`);
-        }
-      });
-      examplePagesText = examplePagesArray.join(' | ');
-    }
-    
-    // Create row data
     const row = [
-      new Date(), // Timestamp
-      fullname,
-      phone,
-      className,
-      hours,
-      capabilities,
-      previousWork,
-      thoughts,
-      examplePagesText,
-      testConfirmation
+      new Date(),
+      expectations.tasks || '',
+      expectations.meetings || '',
+      personalInfo.fullname || '',
+      personalInfo.class || '',
+      personalInfo.phone || '',
+      yksInfo.goal || '',
+      yksInfo.tytNet || '',
+      yksInfo.aytNet || '',
+      yksInfo.dailyHours || '',
+      yksInfo.level || '',
+      motivation.reasons || '',
+      motivation.expectations || '',
+      excitement,
+      permissions
     ];
     
-    // Append row to sheet
     sheet.appendRow(row);
     
-    // Return success response
     return ContentService
       .createTextOutput(JSON.stringify({ 
         success: true, 
@@ -105,11 +91,9 @@ function doPost(e) {
       .setMimeType(ContentService.MimeType.JSON);
       
   } catch (error) {
-    // Log error for debugging
     Logger.log('Error: ' + error.toString());
     Logger.log('Stack: ' + error.stack);
     
-    // Return error response
     return ContentService
       .createTextOutput(JSON.stringify({ 
         success: false, 
@@ -125,19 +109,32 @@ function doPost(e) {
  */
 function testFunction() {
   const testData = {
-    personalInfo: {
-      fullname: 'Test User',
-      phone: '0532 123 45 67',
-      class: '12. Sınıf',
-      hours: '10 saat'
+    expectations: {
+      tasks: 'Evet',
+      meetings: 'Evet'
     },
-    capabilities: ['Tasarım', 'Yazılım Geliştirme'],
-    previousWork: 'Test previous work',
-    thoughts: 'Test thoughts',
-    testConfirmation: 'Onaylıyorum',
-    examplePages: {
-      'Tasarım yeteneğinle ilgili...': 'Yaptım / Yapabilirim'
-    }
+    personalInfo: {
+      fullname: 'Test Kullanıcı',
+      class: '12. Sınıf',
+      phone: '0532 123 45 67'
+    },
+    yksInfo: {
+      goal: 'İlk 1000',
+      tytNet: '80 net',
+      aytNet: '60 net',
+      dailyHours: '4-5 saat',
+      level: 'Orta'
+    },
+    motivation: {
+      reasons: 'Mustafa Ocak ile çalışmak istiyorum',
+      expectations: 'Disiplinli bir program',
+      excitement: ['Mustafa Ocak ile birlikte çalışmak', 'İçeriklerde yer almak']
+    },
+    permissions: [
+      'Çalışmalar boyunca verdiğim bilgilerin içeriklerde kullanılmasına izin veriyorum.',
+      'Yazılı mesajlarımın içeriklerde kullanılmasına izin veriyorum.',
+      'Sesli veya görüntülü kayıtlarımın yapılmasına ve içeriklerde kullanılmasına izin veriyorum.'
+    ]
   };
   
   const mockEvent = {
@@ -148,4 +145,3 @@ function testFunction() {
   
   doPost(mockEvent);
 }
-
