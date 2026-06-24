@@ -109,10 +109,9 @@ function saveCurrentStepData() {
             .map(el => el.value);
         data.checkboxes = checked;
         formData[`step-${currentStep}`] = data;
-    } else if (step.type === 'permissions') {
-        const checked = Array.from(document.querySelectorAll(`input[name="permissions-${currentStep}"]:checked`))
-            .map(el => el.value);
-        formData[`step-${currentStep}`] = checked;
+    } else if (step.type === 'radio') {
+        const selected = document.querySelector(`input[name="radio-${currentStep}"]:checked`);
+        if (selected) formData[`step-${currentStep}`] = selected.value;
     }
 }
 
@@ -219,19 +218,24 @@ function renderCurrentStep() {
                 });
             });
         }, 0);
-    } else if (step.type === 'permissions') {
-        answersHTML = `<div class="form-text">${step.text}</div>`;
+    } else if (step.type === 'radio') {
+        if (step.text) {
+            answersHTML += `<div class="form-text">${step.text}</div>`;
+        }
         answersHTML += `
-            <div class="form-answers">
-                ${step.checkboxes.map((option, index) => `
-                    <div class="option">
-                        <input type="checkbox" id="permission-${index}" name="permissions-${currentStep}" value="${option}">
-                        <label for="permission-${index}">${option}</label>
-                    </div>
-                `).join('')}
+            <div class="form-field-group">
+                <label class="form-field-label">${step.label}</label>
+                <div class="form-answers">
+                    ${step.options.map((option, index) => `
+                        <div class="option">
+                            <input type="radio" id="radio-${index}" name="radio-${currentStep}" value="${option}">
+                            <label for="radio-${index}">${option}</label>
+                        </div>
+                    `).join('')}
+                </div>
             </div>
         `;
-        answersHTML += `<button class="next-button" onclick="handleNext()">Gönder</button>`;
+        answersHTML += `<button class="next-button" onclick="handleNext()">${step.submit ? 'Gönder' : 'Devam Et'}</button>`;
     }
 
     formContent.innerHTML = `
@@ -294,10 +298,10 @@ function handleNext() {
             alert(`En fazla ${step.maxCheckboxes} seçenek seçebilirsiniz.`);
             return;
         }
-    } else if (step.type === 'permissions') {
-        const checked = document.querySelectorAll(`input[name="permissions-${currentStep}"]:checked`);
-        if (checked.length < step.checkboxes.length) {
-            alert('Devam etmek için tüm izinleri onaylamanız gerekiyor.');
+    } else if (step.type === 'radio') {
+        const selected = document.querySelector(`input[name="radio-${currentStep}"]:checked`);
+        if (!selected) {
+            alert('Lütfen bir seçenek seçin.');
             return;
         }
     }
@@ -343,6 +347,16 @@ function initializeForm() {
             question: 'Başlamadan Önce…',
             type: 'info',
             text: `Bu bir koçluk değil – koçluktan daha fazlası. <br><br> Katılım ise ücretsiz. <br><br> Bu ekibe katılarak X Akademi'nin bir parçası olacak, ekiple birlikte çalışacak, hazırladığımız programlardan faydalanacak ve içeriklerde yer alacaksın.`,
+            buttonText: 'Anladım'
+        },
+        {
+            question: 'Süreç Nasıl İşleyecek?',
+            type: 'info',
+            text: `YKS2027 çalışmalarında koçluğa benzer şekilde sana yardımcı olacağız. Buna ek olarak süreç boyunca sana fayda sağlayacak kamplar ve etkinlikler düzenleyeceğiz. <br><br> Örneğin Temmuz ayında "10 Günlük Disiplin Kampı" isimli bir kamp yapacağız. <br><br> Bu kampta <ul>
+                <li>10 gün boyunca görevlerimizi yerine getireceğiz</li>
+                <li>Katılımcılar gelişimlerini paylaşacak</li>
+                <li>Ve bütün süreci bir videoya dönüştüreceğiz</li>
+            </ul> Buna benzer kampları ve projeleri yıl boyunca düzenleyeceğiz.`,
             buttonText: 'Anladım'
         },
         {
@@ -439,14 +453,12 @@ function initializeForm() {
             maxCheckboxes: 2
         },
         {
-            question: 'İzinler',
-            type: 'permissions',
-            text: `Bu ekibe dahil olursan Mustafa Ocak ile birlikte içeriklerde yer alacaksın ve bu sebeple aşağıdaki izinleri onaylamana ihtiyacımız var. <br><br> <strong>Not:</strong> İçeriklerin hiçbirinde ekip üyelerini küçük düşürecek veya kötü etkileyecek bir paylaşım yapılmayacaktır. Ayrıca bilgilerinin tamamı kendi içeriklerimizde kullanılmak üzere saklanır ve başka kişi veya kurumlarla paylaşılmaz.`,
-            checkboxes: [
-                'Çalışmalar boyunca verdiğim bilgilerin içeriklerde kullanılmasına izin veriyorum.',
-                'Yazılı mesajlarımın içeriklerde kullanılmasına izin veriyorum.',
-                'Sesli veya görüntülü kayıtlarımın yapılmasına ve içeriklerde kullanılmasına izin veriyorum.'
-            ]
+            question: 'Süreç Onayı',
+            type: 'radio',
+            text: 'Bu ekibe dahil olursan Mustafa Ocak ile birlikte içeriklerde yer alacaksın.',
+            label: 'Böyle bir çalışmanın parçası olmaya sıcak bakıyor musun?',
+            options: ['Evet', 'Kararsızım', 'Hayır'],
+            submit: true
         }
     ];
 }
@@ -458,11 +470,11 @@ window.handleNext = handleNext;
 // ============================================
 
 function formatFormDataForSubmission() {
-    const expectations = formData['step-1'] || {};
-    const personalInfo = formData['step-2'] || {};
-    const yksInfo = formData['step-3'] || {};
-    const motivation = formData['step-4'] || {};
-    const permissions = formData['step-5'] || [];
+    const expectations = formData['step-2'] || {};
+    const personalInfo = formData['step-3'] || {};
+    const yksInfo = formData['step-4'] || {};
+    const motivation = formData['step-5'] || {};
+    const processApproval = formData['step-6'] || '';
 
     return {
         timestamp: new Date().toISOString(),
@@ -487,7 +499,7 @@ function formatFormDataForSubmission() {
             expectations: motivation.textareas?.expectations || '',
             excitement: Array.isArray(motivation.checkboxes) ? motivation.checkboxes : []
         },
-        permissions: Array.isArray(permissions) ? permissions : []
+        processApproval
     };
 }
 

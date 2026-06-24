@@ -38,7 +38,7 @@ function doPost(e) {
         'Katılma Sebepleri',
         'Beklentiler',
         'Heyecanlandıran Seçenekler',
-        'İzinler'
+        'Süreç Onayı'
       ];
       sheet.appendRow(headers);
       
@@ -56,9 +56,7 @@ function doPost(e) {
     const personalInfo = data.personalInfo || {};
     const yksInfo = data.yksInfo || {};
     const motivation = data.motivation || {};
-    const permissions = Array.isArray(data.permissions)
-      ? data.permissions.join(' | ')
-      : '';
+    const processApproval = data.processApproval || '';
     const excitement = Array.isArray(motivation.excitement)
       ? motivation.excitement.join(', ')
       : '';
@@ -78,7 +76,7 @@ function doPost(e) {
       motivation.reasons || '',
       motivation.expectations || '',
       excitement,
-      permissions
+      processApproval
     ];
     
     sheet.appendRow(row);
@@ -130,11 +128,7 @@ function testFunction() {
       expectations: 'Disiplinli bir program',
       excitement: ['Mustafa Ocak ile birlikte çalışmak', 'İçeriklerde yer almak']
     },
-    permissions: [
-      'Çalışmalar boyunca verdiğim bilgilerin içeriklerde kullanılmasına izin veriyorum.',
-      'Yazılı mesajlarımın içeriklerde kullanılmasına izin veriyorum.',
-      'Sesli veya görüntülü kayıtlarımın yapılmasına ve içeriklerde kullanılmasına izin veriyorum.'
-    ]
+    processApproval: 'Evet'
   };
   
   const mockEvent = {
