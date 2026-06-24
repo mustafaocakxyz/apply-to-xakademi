@@ -346,7 +346,7 @@ function initializeForm() {
         {
             question: 'Başlamadan Önce…',
             type: 'info',
-            text: `Bu bir koçluk değil – koçluktan daha fazlası. <br><br> Katılım ise ücretsiz. <br><br> Bu ekibe katılarak X Akademi'nin bir parçası olacak, ekiple birlikte çalışacak, hazırladığımız programlardan faydalanacak ve içeriklerde yer alacaksın.`,
+            text: `Bu bir koçluk değil – koçluktan daha fazlası. <br><br> Bu ekibe katılarak X Akademi'nin bir parçası olacak, ekiple birlikte çalışacak, hazırladığımız programlardan faydalanacak ve içeriklerde yer alacaksın. <br><br> Katılım ise ücretsiz.`,
             buttonText: 'Anladım'
         },
         {
