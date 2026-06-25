@@ -206,18 +206,6 @@ function renderCurrentStep() {
             </div>
         `;
         answersHTML += `<button class="next-button" onclick="handleNext()">Devam Et</button>`;
-
-        setTimeout(() => {
-            const checkboxes = document.querySelectorAll(`input[name="checkboxes-${currentStep}"]`);
-            checkboxes.forEach(cb => {
-                cb.addEventListener('change', () => {
-                    const checked = document.querySelectorAll(`input[name="checkboxes-${currentStep}"]:checked`);
-                    if (checked.length > step.maxCheckboxes) {
-                        cb.checked = false;
-                    }
-                });
-            });
-        }, 0);
     } else if (step.type === 'radio') {
         if (step.text) {
             answersHTML += `<div class="form-text">${step.text}</div>`;
@@ -292,10 +280,6 @@ function handleNext() {
         const checked = document.querySelectorAll(`input[name="checkboxes-${currentStep}"]:checked`);
         if (checked.length === 0) {
             alert('Lütfen en az bir seçenek seçin.');
-            return;
-        }
-        if (checked.length > step.maxCheckboxes) {
-            alert(`En fazla ${step.maxCheckboxes} seçenek seçebilirsiniz.`);
             return;
         }
     } else if (step.type === 'radio') {
@@ -442,15 +426,12 @@ function initializeForm() {
                     placeholder: 'Beklentilerinizi yazın...'
                 }
             ],
-            checkboxLabel: 'Seni en çok heyecanlandıran hangisi? (en fazla 2 seçebilirsin)',
+            checkboxLabel: 'Seni en çok heyecanlandıran hangisi?',
             checkboxes: [
                 'Mustafa Ocak ile birlikte çalışmak',
                 'Bir ekiple birlikte çalışmak',
-                'Koçluk desteği',
-                'Materyal desteği',
                 'İçeriklerde yer almak'
-            ],
-            maxCheckboxes: 2
+            ]
         },
         {
             question: 'Süreç Onayı',
