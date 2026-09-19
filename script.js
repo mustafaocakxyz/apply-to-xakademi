@@ -265,7 +265,7 @@ function initializeForm() {
             question: 'Aradığımız Özellikler',
             type: 'info',
             text: `<ul>
-                <li>YKS sıralaması SAY 30.000 ve üzeri VEYA EA ilk 1000,</li>
+                <li>YKS sıralaması SAY ilk 30.000 VEYA EA ilk 1000,</li>
                 <li>Bilgisayar kullanımına hakim,</li>
                 <li>Claude, Cursor ve benzeri AI araçlarını kullanabilen,</li>
                 <li>Sorumluluk alabilen ve detayları takip edebilen,</li>
