@@ -23,11 +23,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initWelcomeAnimations() {
     const welcomeTitle = document.querySelector('.welcome-title');
+    const welcomeSubtitle = document.querySelector('.welcome-subtitle');
     const welcomeText = document.querySelector('.welcome-text');
     const ctaButton = document.querySelector('.cta-button');
 
     if (welcomeTitle) {
         setTimeout(() => welcomeTitle.classList.add('animate'), 100);
+    }
+
+    if (welcomeSubtitle) {
+        setTimeout(() => welcomeSubtitle.classList.add('animate'), 250);
     }
 
     if (welcomeText) {
@@ -90,25 +95,9 @@ function saveCurrentStepData() {
             if (input) inputs[field.name] = input.value;
         });
         formData[`step-${currentStep}`] = inputs;
-    } else if (step.type === 'inputs-with-radio') {
-        const data = { fields: {}, radio: '' };
-        step.fields.forEach(field => {
-            const input = document.querySelector(`input[name="${field.name}"]`);
-            if (input) data.fields[field.name] = input.value;
-        });
-        const selected = document.querySelector(`input[name="radio-${currentStep}"]:checked`);
-        if (selected) data.radio = selected.value;
-        formData[`step-${currentStep}`] = data;
-    } else if (step.type === 'motivation') {
-        const data = { textareas: {}, checkboxes: [] };
-        step.textareas.forEach(field => {
-            const textarea = document.querySelector(`textarea[name="${field.name}"]`);
-            if (textarea) data.textareas[field.name] = textarea.value;
-        });
-        const checked = Array.from(document.querySelectorAll(`input[name="checkboxes-${currentStep}"]:checked`))
-            .map(el => el.value);
-        data.checkboxes = checked;
-        formData[`step-${currentStep}`] = data;
+    } else if (step.type === 'textarea') {
+        const textarea = document.querySelector(`textarea[name="question-${currentStep}"]`);
+        if (textarea) formData[`step-${currentStep}`] = textarea.value;
     } else if (step.type === 'radio') {
         const selected = document.querySelector(`input[name="radio-${currentStep}"]:checked`);
         if (selected) formData[`step-${currentStep}`] = selected.value;
@@ -164,45 +153,12 @@ function renderCurrentStep() {
             </div>
         `).join('');
         answersHTML += `<button class="next-button" onclick="handleNext()">Devam Et</button>`;
-    } else if (step.type === 'inputs-with-radio') {
-        answersHTML = step.fields.map(field => `
+    } else if (step.type === 'textarea') {
+        const className = step.long ? 'textarea-input long' : 'textarea-input';
+        answersHTML = `
             <div class="form-field-group">
-                <label class="form-field-label">${field.label}</label>
-                <input type="text" class="text-input" name="${field.name}" placeholder="${field.placeholder || ''}">
-            </div>
-        `).join('');
-        answersHTML += `
-            <div class="form-field-group">
-                <label class="form-field-label">${step.radio.label}</label>
-                <div class="form-answers">
-                    ${step.radio.options.map((option, index) => `
-                        <div class="option">
-                            <input type="radio" id="level-${index}" name="radio-${currentStep}" value="${option}">
-                            <label for="level-${index}">${option}</label>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        `;
-        answersHTML += `<button class="next-button" onclick="handleNext()">Devam Et</button>`;
-    } else if (step.type === 'motivation') {
-        answersHTML = step.textareas.map(field => `
-            <div class="form-field-group">
-                <label class="form-field-label">${field.label}</label>
-                <textarea class="textarea-input" name="${field.name}" placeholder="${field.placeholder || ''}"></textarea>
-            </div>
-        `).join('');
-        answersHTML += `
-            <div class="form-field-group">
-                <label class="form-field-label">${step.checkboxLabel}</label>
-                <div class="form-answers">
-                    ${step.checkboxes.map((option, index) => `
-                        <div class="option">
-                            <input type="checkbox" id="excitement-${index}" name="checkboxes-${currentStep}" value="${option}">
-                            <label for="excitement-${index}">${option}</label>
-                        </div>
-                    `).join('')}
-                </div>
+                <label class="form-field-label">${step.label}</label>
+                <textarea class="${className}" name="question-${currentStep}" placeholder="${step.placeholder || ''}"></textarea>
             </div>
         `;
         answersHTML += `<button class="next-button" onclick="handleNext()">Devam Et</button>`;
@@ -256,30 +212,10 @@ function handleNext() {
                 return;
             }
         }
-    } else if (step.type === 'inputs-with-radio') {
-        for (const field of step.fields) {
-            const input = document.querySelector(`input[name="${field.name}"]`);
-            if (!input || !input.value.trim()) {
-                alert('Lütfen tüm alanları doldurun.');
-                return;
-            }
-        }
-        const selected = document.querySelector(`input[name="radio-${currentStep}"]:checked`);
-        if (!selected) {
-            alert('Lütfen seviyenizi seçin.');
-            return;
-        }
-    } else if (step.type === 'motivation') {
-        for (const field of step.textareas) {
-            const textarea = document.querySelector(`textarea[name="${field.name}"]`);
-            if (!textarea || !textarea.value.trim()) {
-                alert('Lütfen tüm alanları doldurun.');
-                return;
-            }
-        }
-        const checked = document.querySelectorAll(`input[name="checkboxes-${currentStep}"]:checked`);
-        if (checked.length === 0) {
-            alert('Lütfen en az bir seçenek seçin.');
+    } else if (step.type === 'textarea') {
+        const textarea = document.querySelector(`textarea[name="question-${currentStep}"]`);
+        if (!textarea || !textarea.value.trim()) {
+            alert('Lütfen bu alanı doldurun.');
             return;
         }
     } else if (step.type === 'radio') {
@@ -299,9 +235,7 @@ function showCompletionScreen() {
             <h2 class="form-question">Başvurun Alındı</h2>
             <div class="form-text">
                 İlgilendiğin için teşekkürler. <br><br>
-                Eğer başvurun kabul edilirse seni daha yakından tanımak için bir video görüşme ayarlayacağız. <br><br>
-                İnşallah 24 saat içerisinde sana geri dönüş yapacağız. <br><br>
-                Selametle kal.
+                İnşallah en geç 24 saat içerisinde sana dönüş yapacağız.
             </div>
         </div>
     `;
@@ -328,117 +262,100 @@ function updateProgress() {
 function initializeForm() {
     formSteps = [
         {
-            question: 'Başlamadan Önce…',
+            question: 'Aradığımız Özellikler',
             type: 'info',
-            text: `Bu bir koçluk değil – koçluktan daha fazlası. <br><br> Bu ekibe katılarak X Akademi'nin bir parçası olacak, ekiple birlikte çalışacak, hazırladığımız programlardan faydalanacak ve içeriklerde yer alacaksın. <br><br> Katılım ise ücretsiz.`,
+            text: `<ul>
+                <li>YKS sıralaması SAY 30.000 ve üzeri VEYA EA ilk 1000,</li>
+                <li>Bilgisayar kullanımına hakim,</li>
+                <li>Claude, Cursor ve benzeri AI araçlarını kullanabilen,</li>
+                <li>Sorumluluk alabilen ve detayları takip edebilen,</li>
+                <li>Öğrencilerle iletişimi güçlü,</li>
+                <li>YKS öğrencilerinin çalışma sürecini iyi anlayan</li>
+            </ul>`,
             buttonText: 'Anladım'
         },
         {
-            question: 'Süreç Nasıl İşleyecek?',
+            question: 'Çalışma Modeli',
             type: 'info',
-            text: `YKS2027 çalışmalarında koçluğa benzer şekilde sana yardımcı olacağız. Buna ek olarak süreç boyunca sana fayda sağlayacak kamplar ve etkinlikler düzenleyeceğiz. <br><br> Örneğin Temmuz ayında "10 Günlük Disiplin Kampı" isimli bir kamp yapacağız. <br><br> Bu kampta <ul>
-                <li>10 gün boyunca görevlerimizi yerine getireceğiz</li>
-                <li>Katılımcılar gelişimlerini paylaşacak</li>
-                <li>Ve bütün süreci bir videoya dönüştüreceğiz</li>
-            </ul> Buna benzer kampları ve projeleri yıl boyunca düzenleyeceğiz.`,
+            text: `Çalışma Şartları: <ul>
+                <li>Uzaktan</li>
+                <li>Ortalama günde 4–5 saat</li>
+                <li>Gün içine dağılabilen esnek çalışma</li>
+                <li>Haftanın her günü operasyon olduğu için hafta sonu uygunluğu gerekli</li>
+                <li>X Akademi'nin mevcut yazılım paneli ve AI araçları üzerinden çalışma</li>
+            </ul> Ücret: 40.000₺ / ay`,
             buttonText: 'Anladım'
         },
         {
-            question: 'Beklentiler ve Uygunluk',
-            type: 'multiple-radio',
-            intro: 'Bu süreç boyunca senden çalışmalarımıza aktif katılım göstermeni bekliyoruz.',
-            questions: [
-                {
-                    label: 'Vereceğimiz görevleri ve veri girişlerini düzenli yerine getirebilir misin?',
-                    name: 'tasks',
-                    options: ['Evet', 'Hayır']
-                },
-                {
-                    label: 'Online toplantılara ve etkinliklerimize düzenli katılabilir misin?',
-                    name: 'meetings',
-                    options: ['Evet', 'Hayır']
-                }
-            ]
-        },
-        {
-            question: 'Kişisel Bilgiler',
+            question: 'Temel Bilgiler',
             type: 'multiple-inputs',
             fields: [
                 {
-                    label: 'İsim - Soyisim',
+                    label: 'Ad - Soyad',
                     name: 'fullname',
                     placeholder: 'Adınız ve soyadınız'
-                },
-                {
-                    label: 'Sınıfın',
-                    name: 'class',
-                    placeholder: 'Sınıfınız'
                 },
                 {
                     label: 'Telefon',
                     name: 'phone',
                     placeholder: 'Örn: 0532 123 45 67'
+                },
+                {
+                    label: 'YKS Derece(leri)niz (SAY 249 veya EA 605 şeklinde yazınız)',
+                    name: 'yksRank',
+                    placeholder: 'Örn: SAY 249 veya EA 605'
+                },
+                {
+                    label: 'Üniversite',
+                    name: 'university',
+                    placeholder: 'Üniversiteniz'
+                },
+                {
+                    label: 'Bölüm',
+                    name: 'department',
+                    placeholder: 'Bölümünüz'
+                },
+                {
+                    label: 'Sınıf',
+                    name: 'class',
+                    placeholder: 'Sınıfınız'
                 }
             ]
         },
         {
-            question: 'YKS Bilgileri',
-            type: 'inputs-with-radio',
-            fields: [
+            question: 'Müsaitlik',
+            type: 'multiple-radio',
+            questions: [
                 {
-                    label: 'Hedefin nedir?',
-                    name: 'goal',
-                    placeholder: 'Hedefinizi yazın'
+                    label: 'Güne yayılmış şekilde (sabah 1 - 2 saat, gün içinde 1 - 2 saat ve akşam 1 - 2 saat) toplam 4 - 5 saat çalışmaya uygun musunuz?',
+                    name: 'dailyAvailability',
+                    options: ['Evet', 'Hayır']
                 },
                 {
-                    label: 'Ortalama TYT netin',
-                    name: 'tytNet',
-                    placeholder: 'Örn: 80 net'
-                },
-                {
-                    label: 'Ortalama AYT netin',
-                    name: 'aytNet',
-                    placeholder: 'Örn: 60 net'
-                },
-                {
-                    label: 'Günde kaç saat çalışırsın?',
-                    name: 'dailyHours',
-                    placeholder: 'Örn: 4-5 saat'
+                    label: 'Hafta sonları (yine aynı düzende, belki daha hafif) çalışmak için uygun musunuz?',
+                    name: 'weekendAvailability',
+                    options: ['Evet', 'Hayır']
                 }
-            ],
-            radio: {
-                label: 'Mevcut seviyeni nasıl değerlendiriyorsun?',
-                options: ['Sıfır', 'Temel', 'Orta', 'İleri']
-            }
-        },
-        {
-            question: 'Motivasyon',
-            type: 'motivation',
-            textareas: [
-                {
-                    label: 'Bu ekibe katılmak isteme sebeplerin neler?',
-                    name: 'reasons',
-                    placeholder: 'Sebeplerinizi yazın...'
-                },
-                {
-                    label: 'Bu süreçten ne bekliyorsun?',
-                    name: 'expectations',
-                    placeholder: 'Beklentilerinizi yazın...'
-                }
-            ],
-            checkboxLabel: 'Seni en çok heyecanlandıran hangisi?',
-            checkboxes: [
-                'Mustafa Ocak ile birlikte çalışmak',
-                'Bir ekiple birlikte çalışmak',
-                'İçeriklerde yer almak'
             ]
         },
         {
-            question: 'Süreç Onayı',
+            question: 'Yapay Zeka Kullanımı',
+            type: 'textarea',
+            label: 'Daha önce hangi yapay zeka araçlarını kullandınız? Ne için ve nasıl?',
+            placeholder: 'Cevabınızı buraya yazın...',
+            long: true
+        },
+        {
+            question: 'Tercih',
+            type: 'textarea',
+            label: 'Bu işi neden istiyorsun?',
+            placeholder: 'Cevabınızı buraya yazın...'
+        },
+        {
+            question: 'Uygunluk',
             type: 'radio',
-            text: 'Bu ekibe dahil olursan Mustafa Ocak ile birlikte içeriklerde yer alacaksın.',
-            label: 'Böyle bir çalışmanın parçası olmaya sıcak bakıyor musun?',
-            options: ['Evet', 'Kararsızım', 'Hayır'],
+            label: 'İlk görüşmemizi yapmak, ödemeli test sürecini tamamlamak ve işe başlamak için ne zaman uygunsunuz?',
+            options: ['Bugün / yarın', '5 - 7 gün içinde', 'Daha Sonra'],
             submit: true
         }
     ];
@@ -451,43 +368,36 @@ window.handleNext = handleNext;
 // ============================================
 
 function formatFormDataForSubmission() {
-    const expectations = formData['step-2'] || {};
-    const personalInfo = formData['step-3'] || {};
-    const yksInfo = formData['step-4'] || {};
-    const motivation = formData['step-5'] || {};
-    const processApproval = formData['step-6'] || '';
+    const basicInfo = formData['step-2'] || {};
+    const availability = formData['step-3'] || {};
+    const aiUsage = formData['step-4'] || '';
+    const preference = formData['step-5'] || '';
+    const suitability = formData['step-6'] || '';
 
     return {
         timestamp: new Date().toISOString(),
-        expectations: {
-            tasks: expectations.tasks || '',
-            meetings: expectations.meetings || ''
+        basicInfo: {
+            fullname: basicInfo.fullname || '',
+            phone: basicInfo.phone || '',
+            yksRank: basicInfo.yksRank || '',
+            university: basicInfo.university || '',
+            department: basicInfo.department || '',
+            class: basicInfo.class || ''
         },
-        personalInfo: {
-            fullname: personalInfo.fullname || '',
-            class: personalInfo.class || '',
-            phone: personalInfo.phone || ''
+        availability: {
+            daily: availability.dailyAvailability || '',
+            weekend: availability.weekendAvailability || ''
         },
-        yksInfo: {
-            goal: yksInfo.fields?.goal || '',
-            tytNet: yksInfo.fields?.tytNet || '',
-            aytNet: yksInfo.fields?.aytNet || '',
-            dailyHours: yksInfo.fields?.dailyHours || '',
-            level: yksInfo.radio || ''
-        },
-        motivation: {
-            reasons: motivation.textareas?.reasons || '',
-            expectations: motivation.textareas?.expectations || '',
-            excitement: Array.isArray(motivation.checkboxes) ? motivation.checkboxes : []
-        },
-        processApproval
+        aiUsage,
+        preference,
+        suitability
     };
 }
 
 async function submitToGoogleSheets() {
     const data = formatFormDataForSubmission();
 
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxEJpfrNC9h-3WHHD5V0ymLc4c9uivLqSLDPBQR29Yl4w9JuOjnn58GkQMC_ScFeIfX/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwJvdIKfcGUlvLVsQqKSzWfeQz0a16ycQhj4CK9YAjhNg504-t_B2o1llX7G_Eprc5g/exec';
 
     if (!WEB_APP_URL || WEB_APP_URL.includes('YOUR_WEB_APP_URL')) {
         console.warn('Please set your Google Apps Script URL in submitToGoogleSheets()');

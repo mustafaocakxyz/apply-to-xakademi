@@ -39,7 +39,7 @@ body {
     font-size: 2.5rem;
     font-weight: 700;
     color: #FFD700;
-    margin-bottom: 2rem;
+    margin-bottom: 0.75rem;
     line-height: 1.2;
     opacity: 0;
     transform: translateY(30px);
@@ -47,6 +47,21 @@ body {
 
 .welcome-title.animate {
     animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.welcome-subtitle {
+    font-size: 1.125rem;
+    font-weight: 300;
+    color: #FFD700;
+    opacity: 0;
+    margin-bottom: 2rem;
+    line-height: 1.4;
+    transform: translateY(30px);
+}
+
+.welcome-subtitle.animate {
+    animation: fadeInUp 0.8s ease-out forwards;
+    opacity: 0.65;
 }
 
 .welcome-text {
